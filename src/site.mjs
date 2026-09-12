@@ -115,31 +115,27 @@ function kvrLink(url, label) {
       </a>`;
 }
 
-/* The hub's header is seven entries, and so is this one — but on a
-   single-page site the first four are the page's own sections and the rest
-   are the estate. Every entry is classified in README.md; the rule the
-   validator enforces is that nothing here is a hub path pretending to be a
-   local one. */
+/* The estate's navigation, unchanged. These are the hub's own header and
+   footer lists, in the hub's own order, and the same two lists ship on every
+   StudioZIO site. Two owner-approved edits apply everywhere, not just here:
+   MixRack joins the header beside the other two products, and the footer
+   carries no product links at all, so it has room to breathe.
+
+   The only thing this site does differently is spelling: the entry for its
+   own page is "/", and every other entry is written out as an absolute URL,
+   because a relative /notes/ on this domain is a 404 rather than a note. */
 const HEADER_NAVIGATION = [
-  ['MixRack', '/', 'mixrack'],
-  ['Preview', '/#preview', ''],
-  ['Formats', '/#formats', ''],
-  ['Release notice', '/#release-notice', ''],
+  ['Hub', `${HUB_WEBSITE}/`, 'hub'],
+  ['Products', `${HUB_WEBSITE}/products/`, 'products'],
   ['Mastering Suite', MASTERING_SUITE_WEBSITE, 'mastering'],
   ['Tempo Delay', TEMPO_DELAY_WEBSITE, 'tempo'],
-  ['StudioZIO', `${HUB_WEBSITE}/`, 'hub']
+  ['MixRack', '/', 'mixrack'],
+  ['Notes', `${HUB_WEBSITE}/notes/`, 'notes'],
+  ['Community', `${HUB_WEBSITE}/community/`, 'community'],
+  ['Contact', `${HUB_WEBSITE}/contact/`, 'contact']
 ];
 
-/* The estate index, in the hub's own order, with this site's page first and
-   every hub entry written out in full.
-
-   The two product sites are deliberately not repeated here: they are in the
-   header, one row up, and the owner asked for a footer with room to breathe
-   rather than the same two links twice on one screen. The hub's footer is
-   being trimmed the same way, so the shared index stays the same list on
-   every surface. */
 const FOOTER_LINKS = [
-  ['MixRack', '/', 'mixrack'],
   ['Hub', `${HUB_WEBSITE}/`, 'hub'],
   ['Products', `${HUB_WEBSITE}/products/`, 'products'],
   ['Notes', `${HUB_WEBSITE}/notes/`, 'notes'],
