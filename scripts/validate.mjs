@@ -108,8 +108,11 @@ function checkDocument(name, page, { canonical = null } = {}) {
   }
 
   if (!page.includes(`/assets/${STYLESHEET_FILE}`)) throw new Error(`${name}: stylesheet is not fingerprinted`);
-  if (!page.includes(MEASUREMENT_ID) && !page.includes('/assets/gtag.js')) {
-    throw new Error(`${name}: the Google tag is missing`);
+  /* Both halves of the Google tag: our consent-first initialiser and Google's
+     own loader. The site launched with only the first and measured nothing —
+     no page views, no events — because the loader is what fetches gtag.js. */
+  for (const half of ['/assets/gtag.js', `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`]) {
+    if (!page.includes(half)) throw new Error(`${name}: the Google tag is missing ${half}`);
   }
   if (!page.includes('/assets/og/og-mixrack.png')) throw new Error(`${name}: no social image`);
 
