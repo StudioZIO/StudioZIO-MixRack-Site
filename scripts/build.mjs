@@ -11,7 +11,7 @@ import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SITE_ORIGIN, STYLESHEET_FILE, renderMixRack, renderNotFound } from '../src/site.mjs';
-import { validateSource } from './validate.mjs';
+import { checkEveryScriptThePageLoadsExists, validateSource } from './validate.mjs';
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const outputRoot = resolve(projectRoot, 'dist');
@@ -50,6 +50,7 @@ await cp(resolve(projectRoot, 'src/events.js'), resolve(outputRoot, 'assets/even
 // nothing else. Same-origin for the same CSP reason as the rest.
 await cp(resolve(projectRoot, 'src/header-search.js'), resolve(outputRoot, 'assets/header-search.js'));
 await cp(resolve(projectRoot, 'src/nav.js'), resolve(outputRoot, 'assets/nav.js'));
+await cp(resolve(projectRoot, 'src/countdown.js'), resolve(outputRoot, 'assets/countdown.js'));
 // The release-notice and tester-interest forms: a fetch to the one endpoint
 // `connect-src` allows, because `form-action 'none'` refuses a native POST.
 await cp(resolve(projectRoot, 'src/notify.js'), resolve(outputRoot, 'assets/notify.js'));
@@ -75,5 +76,9 @@ await writeFile(
   `User-agent: *\nAllow: /\n\nSitemap: ${SITE_ORIGIN}/sitemap.xml\n`,
   'utf8'
 );
+
+/* After the copy, not before it: run ahead of the write this would be
+   inspecting the previous build. */
+checkEveryScriptThePageLoadsExists();
 
 console.log(`Built ${outputs.size} HTML pages and a ${indexableUrls.length}-URL sitemap into dist/`);

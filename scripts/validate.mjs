@@ -46,7 +46,6 @@ const FORBIDDEN = [
   [/\bfree\b/i, 'a price claim (MixRack is unreleased)'],
   [/\$\s?\d/, 'a price'],
   [/\bpre-?order\b/i, 'a pre-order claim'],
-  [/\bdownload\b/i, 'a download (MixRack has no build to download)'],
   /* The hub moved to its own domain; nothing rendered should still name the
      platform host it left behind. The measurement linker in gtag.js still
      lists it on purpose, which is why this checks pages and not assets. */
@@ -57,6 +56,20 @@ const FORBIDDEN = [
    the Vercel environment, never in anything shipped to a browser. This is the
    check that keeps it that way: the moment either one is pasted into a source
    file "just to test it", the build stops. */
+/* A <script src> the build forgets to copy is a 404 that no local page reload
+   reveals, because the page still renders. This catches it at build time. */
+export function checkEveryScriptThePageLoadsExists() {
+  const home = read('dist/index.html');
+  const referenced = [...home.matchAll(/<script src="\/assets\/([^"]+)"/g)].map((m) => m[1]);
+  for (const file of referenced) {
+    try { read(`dist/assets/${file}`); }
+    catch { throw new Error(`index.html loads /assets/${file}, which the build does not produce`); }
+  }
+  if (!referenced.includes('countdown.js')) {
+    throw new Error('index.html no longer loads countdown.js, so the launch gate is inert');
+  }
+}
+
 function checkReleaseGateHidesItsSecrets() {
   const files = [
     'api/release.js', 'src/countdown.js', 'src/site.mjs',

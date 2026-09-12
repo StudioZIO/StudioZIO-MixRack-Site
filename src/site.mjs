@@ -316,7 +316,7 @@ export function renderMixRack() {
     canonical: `${SITE_ORIGIN}/`,
     current: 'mixrack',
     jsonLd: mixrackJsonLd(),
-    scripts: '<script src="/assets/notify.js" defer></script><script src="/assets/tester.js" defer></script><script src="/assets/video.js" defer></script>',
+    scripts: '<script src="/assets/notify.js" defer></script><script src="/assets/tester.js" defer></script><script src="/assets/video.js" defer></script><script src="/assets/countdown.js" defer></script>',
     content: `<section class="hero tech-grid">
       <div class="shell">
         <div class="rise">
@@ -371,6 +371,32 @@ export function renderMixRack() {
           <div><dt>Status</dt><dd>Coming Soon</dd></div>
           <div class="spec-span"><dt>Planned formats</dt><dd>${formatList(mixrack.formats)}</dd></div>
         </dl>
+      </div>
+    </section>
+    <!-- The gate. The button is here from the first day and stays dim until the
+         server says otherwise: a control that appears out of nowhere at launch
+         is a control nobody was waiting for. It carries no href until then,
+         which is also why it cannot be found early -- the address is not in
+         this page, it arrives from /api/release/ when that endpoint decides. -->
+    <section class="section" id="launch" aria-labelledby="mixrack-launch-title">
+      <div class="shell">
+        <div class="section-head">
+          <p class="eyebrow">Public launch</p>
+          <h2 id="mixrack-launch-title">Counting down</h2>
+          <p class="lede">StudioZIO MixRack 1.0.0 is prepared for public launch. The installer becomes available here the moment the countdown reaches zero.</p>
+        </div>
+        <div class="panel-float launch-gate" id="release-gate" data-state="waiting"
+          data-release-label="Get StudioZIO MixRack 1.0.0">
+          <p class="launch-clock" data-countdown aria-live="off"></p>
+          <p class="launch-note" data-launch-note>Release date is being confirmed.</p>
+          <p class="launch-action" data-release>
+            <a class="btn btn-primary btn-armed" data-release-link aria-disabled="true">Get StudioZIO MixRack 1.0.0</a>
+          </p>
+          <p class="launch-status sr-only" role="status" aria-live="polite"></p>
+        </div>
+        <noscript>
+          <p class="form-note">The launch countdown needs JavaScript. Without it this page cannot tell you whether StudioZIO MixRack has shipped yet — the release notice form below will reach you either way.</p>
+        </noscript>
       </div>
     </section>
     <section class="section" id="release-notice" aria-labelledby="mixrack-notify-title">

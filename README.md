@@ -81,8 +81,10 @@ hub and this site counts as one session.
 
 ## Arming the launch
 
-`api/release.js` is the gate. It is deployed and answering today, and it
-answers "not yet", because neither of the two things it needs is set:
+`api/release.js` is the gate, reachable at `/api/release/` -- the site sets
+`trailingSlash`, so the bare path 308s to it. It is deployed and answering
+today, and it answers "not yet", because neither of the two things it needs
+is set:
 
     MIXRACK_LAUNCH_AT     ISO 8601 instant, e.g. 2026-09-29T09:00:00Z
     MIXRACK_DOWNLOAD_URL  the artefact URL
