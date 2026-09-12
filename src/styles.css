@@ -531,6 +531,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 @media (min-width: 620px) { .spec-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 980px) { .spec-grid { grid-template-columns: repeat(3, 1fr); } }
+/* Four cells divide evenly into two columns and leave a third of the last row
+   empty in three. So the fourth cell spans only where the grid is three wide:
+   spanning it at two columns would strand the third cell on a half-empty row
+   of its own, which is the very thing this is here to prevent. */
+@media (min-width: 980px) { .spec-grid > .spec-span { grid-column: 1 / -1; } }
 .spec-grid > div { background: var(--surface-raised); padding: 1.35rem 1.5rem; }
 .spec-grid dt {
   font-family: var(--font-mono);

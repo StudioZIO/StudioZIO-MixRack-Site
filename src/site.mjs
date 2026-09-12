@@ -59,7 +59,8 @@ const analytics = `<script src="/assets/gtag.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}"></script>
   <script src="/assets/consent.js" defer></script>
   <script src="/assets/events.js" defer></script>
-  <script src="/assets/header-search.js" defer></script>`;
+  <script src="/assets/header-search.js" defer></script>
+  <script src="/assets/nav.js" defer></script>`;
 
 export { MEASUREMENT_ID };
 
@@ -362,13 +363,13 @@ export function renderMixRack() {
         <div class="section-head">
           <p class="eyebrow">Planned formats</p>
           <h2 id="mixrack-spec-title">Coming Soon</h2>
-          <p class="lede">StudioZIO MixRack is in development. Release details will be published when they are available.</p>
+          <p class="lede">StudioZIO MixRack 1.0.0 is prepared for public launch. Release details are published when the launch is announced.</p>
         </div>
         <dl class="spec-grid">
           <div><dt>Manufacturer</dt><dd>${escapeHtml(mixrack.manufacturer)}</dd></div>
           <div><dt>Platform</dt><dd>${escapeHtml(mixrack.platform)}</dd></div>
           <div><dt>Status</dt><dd>Coming Soon</dd></div>
-          <div><dt>Formats</dt><dd>${formatList(mixrack.formats)}</dd></div>
+          <div class="spec-span"><dt>Planned formats</dt><dd>${formatList(mixrack.formats)}</dd></div>
         </dl>
       </div>
     </section>
@@ -377,7 +378,7 @@ export function renderMixRack() {
         <div class="section-head">
           <p class="eyebrow">Release notice</p>
           <h2 id="mixrack-notify-title">Hear about it once</h2>
-          <p class="lede">StudioZIO MixRack has no release date yet. Leave an address and it gets used exactly once — on the day it ships.</p>
+          <p class="lede">StudioZIO MixRack 1.0.0 is prepared for public launch. Leave an address and it gets used exactly once — on the day it ships.</p>
         </div>
         <form class="panel-float notify-form" novalidate="false">
           <div class="form-hp" aria-hidden="true">
@@ -408,7 +409,7 @@ export function renderMixRack() {
         <div class="section-head">
           <p class="eyebrow">Testing interest</p>
           <h2 id="mixrack-tester-title">Interested in testing MixRack?</h2>
-          <p class="lede">StudioZIO MixRack is still in active development and no test build is being distributed yet. A small tester pool is being assembled, and selected people may be contacted for a future beta or release-candidate build. Submitting interest does not guarantee selection, and the details below are used only to evaluate and contact potential testers.</p>
+          <p class="lede">StudioZIO MixRack 1.0.0 is prepared for public launch, and no test build is being distributed yet. A small tester pool is being assembled, and selected people may be contacted for a future beta or release-candidate build. Submitting interest does not guarantee selection, and the details below are used only to evaluate and contact potential testers.</p>
         </div>
         <form class="panel-float tester-form" novalidate="false">
           <div class="form-hp" aria-hidden="true">

@@ -46,8 +46,34 @@ const FORBIDDEN = [
   [/\bfree\b/i, 'a price claim (MixRack is unreleased)'],
   [/\$\s?\d/, 'a price'],
   [/\bpre-?order\b/i, 'a pre-order claim'],
-  [/\bdownload\b/i, 'a download (MixRack has no build to download)']
+  [/\bdownload\b/i, 'a download (MixRack has no build to download)'],
+  /* The hub moved to its own domain; nothing rendered should still name the
+     platform host it left behind. The measurement linker in gtag.js still
+     lists it on purpose, which is why this checks pages and not assets. */
+  [/studiozio\.vercel\.app/i, "the hub's old host (it is studiozio.tech now)"]
 ];
+
+/* The release gate's two secrets -- the instant and the artefact URL -- live in
+   the Vercel environment, never in anything shipped to a browser. This is the
+   check that keeps it that way: the moment either one is pasted into a source
+   file "just to test it", the build stops. */
+function checkReleaseGateHidesItsSecrets() {
+  const files = [
+    'api/release.js', 'src/countdown.js', 'src/site.mjs',
+    'src/notify.js', 'src/tester.js', 'src/video.js'
+  ];
+  for (const file of files) {
+    let body;
+    try { body = read(file); } catch { continue; }
+    const leak = body.match(/https?:\/\/[^\s'"`]*\/(?:releases|download)\/[^\s'"`]*/i);
+    if (leak) {
+      throw new Error(`${file}: a release artefact URL is in client-reachable source (${leak[0]})`);
+    }
+    if (/StudioZIO-Mixrack-\d+\.\d+\.\d+\.pkg/i.test(body)) {
+      throw new Error(`${file}: the package filename is in client-reachable source`);
+    }
+  }
+}
 
 const REQUIRED_FACTS = [
   'StudioZIO MixRack',
@@ -273,6 +299,8 @@ export function validateSource() {
   if (legacy.length !== 2 || legacy.some((redirect) => redirect.destination !== '/')) {
     throw new Error('vercel.json: the legacy /products/mixrack redirects are missing');
   }
+
+  checkReleaseGateHidesItsSecrets();
 
   console.log('validate: ok');
 }

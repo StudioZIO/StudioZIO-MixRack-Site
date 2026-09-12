@@ -76,6 +76,35 @@ tester-interest forms post to the same Formspree endpoint the hub uses, and
 identify themselves as `StudioZIO MixRack site` so their submissions can be
 told apart from the hub's.
 
-Follow-up for the owner: this domain is not yet in GA4's cross-domain list,
-so a visitor moving between the hub and this site currently counts as two
-sessions.
+This domain is in GA4's cross-domain list, so a visitor moving between the
+hub and this site counts as one session.
+
+## Arming the launch
+
+`api/release.js` is the gate. It is deployed and answering today, and it
+answers "not yet", because neither of the two things it needs is set:
+
+    MIXRACK_LAUNCH_AT     ISO 8601 instant, e.g. 2026-09-29T09:00:00Z
+    MIXRACK_DOWNLOAD_URL  the artefact URL
+
+Both live in the Vercel project's environment variables and nowhere else.
+Neither is in this repository, and `npm run lint` fails the build if either
+one turns up in a file the browser can reach.
+
+They are independent on purpose. Setting the URL early is safe: the instant
+still withholds it. Setting the instant early is safe too: with no URL there
+is nothing to hand out. The launch needs both, so neither mistake can publish
+a link on its own.
+
+Order to arm it:
+
+1. Set `MIXRACK_LAUNCH_AT`. The endpoint starts reporting the date, and the
+   countdown section can be switched on: add the markup from the top of
+   `src/countdown.js` and load `/assets/countdown.js` on the page.
+2. On launch day, set `MIXRACK_DOWNLOAD_URL`. Nothing needs rebuilding or
+   redeploying; the endpoint sets no cache headers, so the next poll from any
+   open page picks it up within a minute.
+
+The countdown in the browser is decoration. It corrects for a wrong device
+clock using the server's time, but it cannot unlock anything, because the URL
+simply is not in the page until the server sends it.
