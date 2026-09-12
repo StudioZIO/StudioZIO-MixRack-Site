@@ -2,3 +2,5 @@ dist/
 node_modules/
 qa/
 .DS_Store
+.vercel
+.env*
