@@ -129,8 +129,8 @@ function checkLinks(name, page, homeIds) {
       local += 1;
       continue;
     }
-    /* Section links are written as /#id, so the same header works on the 404
-       page, where those sections do not exist. The target still has to. */
+    /* A deep link into a section, if one is ever added, still has to point at
+       a section that exists. */
     if (href.startsWith('/#')) {
       if (!homeIds.has(href.slice(2))) throw new Error(`${name}: section link ${href} has no target on the home page`);
       local += 1;
@@ -148,8 +148,8 @@ function checkLinks(name, page, homeIds) {
     if (!ALLOWED_HOSTS.has(host)) throw new Error(`${name}: ${href} points at an unknown host`);
     external += 1;
   }
-  if (local < 5) throw new Error(`${name}: expected the page's own section links`);
-  if (external < 8) throw new Error(`${name}: the estate links are missing from the footer`);
+  if (local < 3) throw new Error(`${name}: the page's own links are missing`);
+  if (external < 10) throw new Error(`${name}: estate links are missing from the header or footer`);
   return { total: hrefs.length, local, external };
 }
 
@@ -196,12 +196,20 @@ export function validateSource() {
   for (const url of [`${HUB_WEBSITE}/`, `${HUB_WEBSITE}/products/`, `${HUB_WEBSITE}/notes/`, `${HUB_WEBSITE}/contact/`, `${HUB_WEBSITE}/press/`, MASTERING_SUITE_WEBSITE, TEMPO_DELAY_WEBSITE, ZIO_WEBSITE]) {
     if (!home.includes(`href="${url}"`)) throw new Error(`index.html: no link to ${url}`);
   }
-  /* The two product sites belong in the header on this site; repeating them
-     in the footer is the clutter the owner asked to remove. */
+  /* The estate's shared rule, owner-approved and applied on every site: the
+     two product sites live in the header, and the footer carries no product
+     links at all. */
+  const header = home.split('</header>')[0];
   const footer = home.split('<footer class="site-footer">')[1];
   for (const url of [MASTERING_SUITE_WEBSITE, TEMPO_DELAY_WEBSITE]) {
+    if (!header.includes(`<li><a href="${url}"`)) throw new Error(`index.html: ${url} is missing from the header`);
     if (footer.includes(`<li><a href="${url}"`)) throw new Error(`index.html: ${url} is back in the footer list`);
   }
+  if (!header.includes('<li><a href="/" aria-current="page">MixRack</a></li>')) {
+    throw new Error('index.html: MixRack is not the current entry in the header');
+  }
+  const footerEntries = (footer.match(/<li><a href=/g) || []).length;
+  if (footerEntries !== 6) throw new Error(`index.html: the footer lists ${footerEntries} links, wanted 6`);
 
   /* The film and its poster are real files of a sane size: a poster that is
      secretly a placeholder, or an .mp4 that is an HTML error page, both
