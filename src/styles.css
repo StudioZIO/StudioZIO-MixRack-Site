@@ -258,7 +258,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 
 .nav-links { display: none; }
-.nav-links ul { display: flex; align-items: center; gap: 1.25rem; }
+.nav-links ul { display: flex; align-items: center; gap: 2rem; }
 .nav-links a {
   display: block;
   padding-block: 0.75rem;
@@ -267,10 +267,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  /* A two-word label folding onto a second line turned the header into two
-     rows of ragged type. The row either fits on one line or gives way to the
-     compact menu; it never wraps. */
-  white-space: nowrap;
   color: var(--muted-foreground);
   transition: color var(--dur-fast) var(--ease-out);
 }
@@ -278,25 +274,26 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .nav-links a[aria-current="page"] { color: var(--foreground); }
 
 /* compact nav: native disclosure, works without JavaScript */
-/* The search box that sits in the header on every StudioZIO site. Sized to
-   read as part of the navigation rather than as a form: the placeholder
-   borrows the nav's mono capitals, what the visitor types stays in the body
-   face so it is comfortable to read back. */
+
+/* The search box that sits in the header. It carries what is typed to the
+   hub's search page and does nothing else; the estate's index lives there.
+   Enter rather than a <form>, because form-action is 'none'. Two copies
+   ship, one in the row and one in the compact menu, so the box is there on a
+   phone as well. */
 .header-search { flex: none; width: 150px; }
-.header-search-field {
+.header-search .header-search-field {
   min-height: 38px;
   padding: 0.4rem 0.7rem;
   font-size: 0.8125rem;
 }
-.header-search-field::placeholder {
+.header-search .header-search-field::placeholder {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
-/* Inside the compact menu it is the full width of the panel and sits above
-   the links, because on a phone it replaces reading the whole menu. */
 .header-search--panel { width: auto; padding: 0.85rem; border-bottom: 1px solid var(--hairline); }
+.header-search--bar { display: none; }
 
 .nav-compact { position: relative; }
 .nav-compact > summary {
@@ -340,22 +337,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   color: var(--muted-foreground);
 }
 .nav-compact .panel a:hover, .nav-compact .panel a[aria-current="page"] { color: var(--foreground); }
-/* Below this the row is put away whole -- links and box together -- and both
-   reappear inside the compact panel. The threshold is set by what the row
-   actually measures with the box beside it, not by a round number. */
-/* The header is the one row that has to hold everything at once -- eight
-   destinations, a logo that carries a product name on the product sites, and
-   now the box -- so it is given more width than the columns below it. The
-   page content keeps the narrower measure that makes it readable; only the
-   bar runs wider. */
-.site-header .shell { max-width: 82.5rem; }
-
-/* Below this the row is put away whole -- links and box together -- and both
-   reappear inside the compact panel. The threshold is what the widest of the
-   four sites actually measures, not a round number: the product sites carry a
-   longer logo, and the row has to fit there too. */
-.header-search--bar { display: none; }
-@media (min-width: 1260px) {
+@media (min-width: 940px) {
   .nav-links { display: block; }
   .header-search--bar { display: block; }
   .nav-compact { display: none; }
@@ -902,12 +884,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .form-status:empty { display: none; }
 .form-status--sent { color: var(--primary-text); }
 .form-status--error { color: var(--destructive); }
-
-/* The search page reports a result count, not a form outcome: the same
-   quiet voice as .form-status, and it collapses to nothing while the box is
-   still empty so the page does not open with a blank line reserved for it. */
-.result-status { margin: 0; font-size: 0.9375rem; color: var(--muted-foreground); }
-.result-status:empty { display: none; }
 
 .form-note { margin: 1.25rem 0 0; font-size: 0.9375rem; color: var(--muted-foreground); }
 

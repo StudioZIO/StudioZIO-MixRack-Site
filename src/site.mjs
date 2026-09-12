@@ -131,12 +131,14 @@ function kvrLink(url, label) {
    The only thing this site does differently is spelling: the entry for its
    own page is "/", and every other entry is written out as an absolute URL,
    because a relative /notes/ on this domain is a 404 rather than a note. */
+/* The three product sites left this row. Eight destinations and the search
+   box did not fit on one line, and the owner's call was that the products
+   belong behind Products, where the catalogue describes them, rather than
+   repeated in every header. Anyone who knows the product name types it in the
+   box. The same five entries ship on all four StudioZIO sites. */
 const HEADER_NAVIGATION = [
   ['Hub', `${HUB_WEBSITE}/`, 'hub'],
   ['Products', `${HUB_WEBSITE}/products/`, 'products'],
-  ['Mastering Suite', MASTERING_SUITE_WEBSITE, 'mastering'],
-  ['Tempo Delay', TEMPO_DELAY_WEBSITE, 'tempo'],
-  ['MixRack', '/', 'mixrack'],
   ['Notes', `${HUB_WEBSITE}/notes/`, 'notes'],
   ['Community', `${HUB_WEBSITE}/community/`, 'community'],
   ['Contact', `${HUB_WEBSITE}/contact/`, 'contact']
