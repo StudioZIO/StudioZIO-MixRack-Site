@@ -192,6 +192,23 @@ export function validateSource() {
     if (!player.includes(measured)) throw new Error(`video.js: the preview is not measured (${measured})`);
   }
   if (!home.includes('/assets/events.js')) throw new Error('index.html: the conversion listener is not loaded');
+
+  /* The header's search box, twice on every page -- once in the row, once in
+     the compact menu -- and the script that carries what is typed to the
+     hub's search page. The estate's index lives there, not here, so a box
+     that shipped without its destination would look like search and do
+     nothing. */
+  for (const page of [home, notFound]) {
+    const boxes = (page.match(/class="field header-search-field"/g) ?? []).length;
+    if (boxes !== 2) throw new Error(`the header search box should appear twice per page, found ${boxes}`);
+    if (!page.includes('/assets/header-search.js')) {
+      throw new Error('the header search box ships without header-search.js');
+    }
+  }
+  const headerSearchScript = read('src/header-search.js');
+  if (!headerSearchScript.includes(`${HUB_WEBSITE}/search/`)) {
+    throw new Error('header-search.js does not point at the hub\'s search page');
+  }
   if (!body.includes('preload="none"')) throw new Error('index.html: the <noscript> fallback must not preload');
 
   for (const script of ['notify.js', 'tester.js', 'video.js']) {

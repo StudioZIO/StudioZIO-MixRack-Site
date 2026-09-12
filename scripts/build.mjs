@@ -46,6 +46,9 @@ await cp(resolve(projectRoot, 'src/og'), resolve(outputRoot, 'assets/og'), { rec
 await cp(resolve(projectRoot, 'src/gtag.js'), resolve(outputRoot, 'assets/gtag.js'));
 await cp(resolve(projectRoot, 'src/consent.js'), resolve(outputRoot, 'assets/consent.js'));
 await cp(resolve(projectRoot, 'src/events.js'), resolve(outputRoot, 'assets/events.js'));
+// The header's search box hands its query to the hub's search page and does
+// nothing else. Same-origin for the same CSP reason as the rest.
+await cp(resolve(projectRoot, 'src/header-search.js'), resolve(outputRoot, 'assets/header-search.js'));
 // The release-notice and tester-interest forms: a fetch to the one endpoint
 // `connect-src` allows, because `form-action 'none'` refuses a native POST.
 await cp(resolve(projectRoot, 'src/notify.js'), resolve(outputRoot, 'assets/notify.js'));
