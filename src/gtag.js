@@ -79,6 +79,7 @@ var STUDIOZIO_NETWORK_DOMAINS = [
   'studiozio.vercel.app',
   'studioziomasteringsuite.vercel.app',
   'www.tempodelay.tech',
+  'studioziomixrack.vercel.app',
   'zio-audio.vercel.app'
 ];
 
