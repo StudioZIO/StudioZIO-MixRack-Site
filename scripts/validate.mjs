@@ -183,11 +183,13 @@ export function validateSource() {
   if (!body.includes('data-video-src="/assets/media/mixrack-intro.mp4"')) {
     throw new Error('index.html: the click-to-load facade is missing');
   }
-  /* The play button is the page's one measured control. Without these two
-     attributes events.js has nothing to report and the video_play key event
-     in GA4 silently counts nothing. */
-  for (const measured of ['data-event="video_play"', 'data-ev-product="mixrack"']) {
-    if (!body.includes(measured)) throw new Error(`index.html: the preview is not measured (${measured})`);
+  /* The film is the page's one measured thing, and it reports under the name
+     the Mastering Suite site already uses, so the estate has one video metric
+     rather than two. The reporting lives in video.js, on the player's own play
+     event — a click that never starts playing is not a view. */
+  const player = read('src/video.js');
+  for (const measured of ["'demo_video_play'", "product:", "clip:", "addEventListener('play'"]) {
+    if (!player.includes(measured)) throw new Error(`video.js: the preview is not measured (${measured})`);
   }
   if (!home.includes('/assets/events.js')) throw new Error('index.html: the conversion listener is not loaded');
   if (!body.includes('preload="none"')) throw new Error('index.html: the <noscript> fallback must not preload');
