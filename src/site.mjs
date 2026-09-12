@@ -58,7 +58,8 @@ const MEASUREMENT_ID = 'G-VL8Z542XMP';
 const analytics = `<script src="/assets/gtag.js"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}"></script>
   <script src="/assets/consent.js" defer></script>
-  <script src="/assets/events.js" defer></script>`;
+  <script src="/assets/events.js" defer></script>
+  <script src="/assets/header-search.js" defer></script>`;
 
 export { MEASUREMENT_ID };
 
@@ -149,6 +150,19 @@ const FOOTER_LINKS = [
   ['Press kit', `${HUB_WEBSITE}/press/`, 'press'],
   ['ZIO', ZIO_WEBSITE, 'zio']
 ];
+
+/* The header carries the search box itself rather than a link to it. The
+   index lives on the hub and covers all four properties, so the box here
+   hands its query to studiozio.vercel.app/search/ -- the same box, in the
+   same place, on every StudioZIO site. Two copies ship: one in the row, one
+   inside the compact menu, because the row is put away on a phone and the
+   box should not be. Enter is handled by header-search.js; there is no
+   <form> because form-action is 'none'. */
+function headerSearch(variant) {
+  return `<div class="header-search${variant ? ` header-search--${variant}` : ''}">
+          <input class="field header-search-field" type="search" name="q" aria-label="Search StudioZIO" placeholder="Search" autocomplete="off" autocapitalize="off" spellcheck="false">
+        </div>`;
+}
 
 function navList(current, entries) {
   return entries.map(
@@ -254,9 +268,11 @@ function shell({ title, description, canonical, current, content, scripts = '', 
       <nav class="nav-links" aria-label="Primary">
         <ul>${navList(current, HEADER_NAVIGATION)}</ul>
       </nav>
+      ${headerSearch('bar')}
       <details class="nav-compact">
         <summary aria-label="Menu" aria-controls="compact-menu"><span class="open" aria-hidden="true">≡</span><span class="shut" aria-hidden="true">×</span></summary>
         <nav class="panel" id="compact-menu" aria-label="Primary">
+          ${headerSearch('panel')}
           <ul>${navList(current, HEADER_NAVIGATION)}</ul>
         </nav>
       </details>
