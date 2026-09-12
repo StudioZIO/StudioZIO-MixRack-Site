@@ -103,9 +103,16 @@ Order to arm it:
 1. Set `MIXRACK_LAUNCH_AT`. The endpoint starts reporting the date, and the
    countdown section can be switched on: add the markup from the top of
    `src/countdown.js` and load `/assets/countdown.js` on the page.
-2. On launch day, set `MIXRACK_DOWNLOAD_URL`. Nothing needs rebuilding or
-   redeploying; the endpoint sets no cache headers, so the next poll from any
-   open page picks it up within a minute.
+2. Set `MIXRACK_DOWNLOAD_URL` **before launch day, not on it**, and redeploy
+   after setting it. Vercel bakes environment variables into a deployment, so
+   a variable added afterwards does nothing until the next deploy — the
+   dashboard says so when you save one. Setting it early is safe: the instant
+   still withholds it.
+
+At the launch instant nothing has to be done. The comparison happens per
+request, the endpoint sets no cache headers, and any page left open picks the
+change up within a minute. That is only true if both variables were already
+in a deployment — which is what step 2 is for.
 
 The countdown in the browser is decoration. It corrects for a wrong device
 clock using the server's time, but it cannot unlock anything, because the URL
