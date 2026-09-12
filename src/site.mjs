@@ -47,10 +47,16 @@ const KVR_MASTERING_URL =
 const KVR_TEMPO_URL =
   'https://www.kvraudio.com/product/studiozio-tempo-delay-by-studiozio';
 
-/* Same tag, same two files, same reason as the rest of the estate: the CSP
-   has no 'unsafe-inline', so the Google tag cannot be pasted into the page. */
+/* Same tag, same files, same order as the rest of the estate. gtag.js runs
+   first and synchronously, so the Consent Mode defaults are set before the
+   loader that follows it can measure anything; the CSP has no 'unsafe-inline',
+   which is why our half of Google's snippet is a file rather than a block.
+   The loader line is Google's own and has to be in the head verbatim — this
+   site shipped without it at first and measured precisely nothing, so the
+   validator now asserts it. */
 const MEASUREMENT_ID = 'G-VL8Z542XMP';
 const analytics = `<script src="/assets/gtag.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}"></script>
   <script src="/assets/consent.js" defer></script>
   <script src="/assets/events.js" defer></script>`;
 
