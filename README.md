@@ -38,21 +38,24 @@ No dependencies. Node 20+ and the standard library; `dist/` is static.
 
 ## Link ownership
 
-Every link on the site is one of three kinds. The validator enforces the
-rule that nothing is a hub path pretending to be a local one.
+The header and the footer are the estate's own lists, identical to the ones
+the other StudioZIO sites carry, with two owner-approved changes that apply
+to every site: MixRack joins the header, and the footer carries no product
+links. The validator enforces both, plus the rule that nothing on this site
+is a hub path pretending to be a local one.
 
 | Link | Kind | Destination |
 | --- | --- | --- |
-| MixRack | LOCAL_MIXRACK | `/` |
-| Preview, Formats, Release notice | LOCAL_MIXRACK | `/#preview`, `/#formats`, `/#release-notice` |
-| Mastering Suite | EXTERNAL | studioziomasteringsuite.vercel.app |
-| Tempo Delay | EXTERNAL | www.tempodelay.tech |
-| StudioZIO, Hub, Products, Notes, Contact, Press kit | STUDIOZIO_HUB | absolute `studiozio.vercel.app/...` URLs |
-| ZIO | EXTERNAL | zio-audio.vercel.app |
+| MixRack (header) | LOCAL_MIXRACK | `/` |
+| Hub, Products, Notes, Community, Contact, Press kit | STUDIOZIO_HUB | absolute `studiozio.vercel.app/...` URLs |
+| Mastering Suite (header) | EXTERNAL | studioziomasteringsuite.vercel.app |
+| Tempo Delay (header) | EXTERNAL | www.tempodelay.tech |
+| ZIO (footer) | EXTERNAL | zio-audio.vercel.app |
 | Instagram, YouTube, KVR ×2 | EXTERNAL | opened in a new tab, `rel="noopener noreferrer"` |
 
-Section links are written `/#id` rather than `#id` so the same header works
-on the 404 page, where those sections do not exist.
+Header: Hub · Products · Mastering Suite · Tempo Delay · MixRack · Notes ·
+Community · Contact. Footer: Hub · Products · Notes · Contact · Press kit ·
+ZIO.
 
 ## Deployment
 
