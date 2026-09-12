@@ -21,6 +21,20 @@
       source.src = button.dataset.videoSrc;
       source.type = 'video/mp4';
       video.append(source);
+
+      /* Reported when the player actually starts, not when the button is
+         clicked: a blocked autoplay would otherwise count as a view. Same
+         event name and parameters as the Mastering Suite site's demo clip, so
+         GA4 has one video metric for the estate rather than one per site.
+         Guarded because a visitor who declined measurement has no gtag. */
+      video.addEventListener('play', () => {
+        if (typeof window.gtag !== 'function') return;
+        window.gtag('event', 'demo_video_play', {
+          product: button.dataset.evProduct || 'mixrack',
+          clip: button.dataset.evClip || 'mixrack-intro'
+        });
+      }, { once: true });
+
       button.replaceWith(video);
       video.focus();
       const started = video.play();
