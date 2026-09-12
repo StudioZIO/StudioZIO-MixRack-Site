@@ -152,7 +152,7 @@ function checkLinks(name, page, homeIds) {
     external += 1;
   }
   if (local < 3) throw new Error(`${name}: the page's own links are missing`);
-  if (external < 10) throw new Error(`${name}: estate links are missing from the header or footer`);
+  if (external < 4) throw new Error(`${name}: estate links are missing from the header or footer`);
   return { total: hrefs.length, local, external };
 }
 
@@ -221,22 +221,25 @@ export function validateSource() {
   checkLinks('404.html', notFound, homeIds);
 
   /* Each estate destination appears at least once, so no property becomes
-     unreachable from this one. */
-  for (const url of [`${HUB_WEBSITE}/`, `${HUB_WEBSITE}/products/`, `${HUB_WEBSITE}/notes/`, `${HUB_WEBSITE}/contact/`, `${HUB_WEBSITE}/press/`, MASTERING_SUITE_WEBSITE, TEMPO_DELAY_WEBSITE, ZIO_WEBSITE]) {
+     unreachable from this one. The other two product sites left the header
+     with this one's own entry: they are reached from the hub's catalogue now,
+     which this page links, so they are not expected here. */
+  for (const url of [`${HUB_WEBSITE}/`, `${HUB_WEBSITE}/products/`, `${HUB_WEBSITE}/notes/`, `${HUB_WEBSITE}/contact/`, `${HUB_WEBSITE}/press/`, ZIO_WEBSITE]) {
     if (!home.includes(`href="${url}"`)) throw new Error(`index.html: no link to ${url}`);
   }
-  /* The estate's shared rule, owner-approved and applied on every site: the
-     two product sites live in the header, and the footer carries no product
-     links at all. */
+  /* The estate's shared rule, owner-approved and applied on every site: no
+     product link in the header or the footer. The three product sites are
+     reached from the hub's catalogue, and the header's search box finds them
+     by name; a header that repeated them could not also hold the box on one
+     line. The five entries below are the same on all four sites. */
   const header = home.split('</header>')[0];
   const footer = home.split('<footer class="site-footer">')[1];
   for (const url of [MASTERING_SUITE_WEBSITE, TEMPO_DELAY_WEBSITE]) {
-    if (!header.includes(`<li><a href="${url}"`)) throw new Error(`index.html: ${url} is missing from the header`);
+    if (header.includes(`<li><a href="${url}"`)) throw new Error(`index.html: ${url} is back in the header list`);
     if (footer.includes(`<li><a href="${url}"`)) throw new Error(`index.html: ${url} is back in the footer list`);
   }
-  if (!header.includes('<li><a href="/" aria-current="page">MixRack</a></li>')) {
-    throw new Error('index.html: MixRack is not the current entry in the header');
-  }
+  const headerEntries = (header.match(/<li><a href=/g) || []).length;
+  if (headerEntries !== 10) throw new Error(`index.html: the header lists ${headerEntries} links across its two menus, wanted 10`);
   const footerEntries = (footer.match(/<li><a href=/g) || []).length;
   if (footerEntries !== 6) throw new Error(`index.html: the footer lists ${footerEntries} links, wanted 6`);
 
