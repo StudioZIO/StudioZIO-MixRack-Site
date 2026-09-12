@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "build": "node scripts/build.mjs",
-    "typecheck": "node --check src/catalog.mjs && node --check src/site.mjs && node --check scripts/build.mjs && node --check scripts/dev.mjs && node --check scripts/validate.mjs",
+    "typecheck": "node --check src/catalog.mjs && node --check src/site.mjs && node --check scripts/build.mjs && node --check scripts/dev.mjs && node --check scripts/validate.mjs && node --check src/header-search.js",
     "lint": "node scripts/validate.mjs",
     "check": "npm run typecheck && npm run lint && npm run build"
   }
