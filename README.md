@@ -31,7 +31,7 @@ No dependencies. Node 20+ and the standard library; `dist/` is static.
 | `src/styles.css` | the hub stylesheet, byte for byte |
 | `src/fonts/` | Inter Tight, Space Grotesk, JetBrains Mono (OFL, licences included) |
 | `src/media/` | the two-minute preview film and its poster |
-| `src/og/og-mixrack.png` | 1200×630 share card, cut from the film's end card |
+| `src/og/og-mixrack.png` | 1200×630 share card, the estate’s own MixRack card |
 | `src/*.js` | classic scripts: the Google tag, consent, conversion events, the two forms, the click-to-load video |
 | `scripts/build.mjs` | writes `dist/`, the sitemap and robots.txt |
 | `scripts/validate.mjs` | the gate — run by `npm run lint` and by the build |
