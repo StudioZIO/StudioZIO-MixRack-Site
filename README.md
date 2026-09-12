@@ -1,7 +1,7 @@
 # StudioZIO MixRack — dedicated site
 
 The product page for **StudioZIO MixRack**, moved out of the hub
-(`studiozio.vercel.app/products/mixrack/`) onto its own domain:
+(`www.studiozio.tech/products/mixrack/`) onto its own domain:
 
     https://studioziomixrack.vercel.app/
 
@@ -47,7 +47,7 @@ is a hub path pretending to be a local one.
 | Link | Kind | Destination |
 | --- | --- | --- |
 | MixRack (header) | LOCAL_MIXRACK | `/` |
-| Hub, Products, Notes, Community, Contact, Press kit | STUDIOZIO_HUB | absolute `studiozio.vercel.app/...` URLs |
+| Hub, Products, Notes, Community, Contact, Press kit | STUDIOZIO_HUB | absolute `www.studiozio.tech/...` URLs |
 | Mastering Suite (header) | EXTERNAL | studioziomasteringsuite.vercel.app |
 | Tempo Delay (header) | EXTERNAL | www.tempodelay.tech |
 | ZIO (footer) | EXTERNAL | zio-audio.vercel.app |
