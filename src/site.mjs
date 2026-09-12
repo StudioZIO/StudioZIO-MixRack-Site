@@ -305,6 +305,10 @@ export function renderMixRack() {
         </div>
       </div>
     </section>
+    <!-- The play button is the one measured control on this page: events.js
+         reads data-event and sends video_play with product=mixrack, so the
+         count in GA4 is people who asked for the film rather than people who
+         scrolled past its poster. -->
     <section class="section" id="preview" aria-labelledby="mixrack-video-title">
       <div class="shell">
         <div class="section-head">
@@ -314,7 +318,8 @@ export function renderMixRack() {
         </div>
         <figure class="panel-float video-card">
           <button class="video-facade" type="button" data-video-src="/assets/media/mixrack-intro.mp4"
-            data-video-label="StudioZIO MixRack introduction, two minutes, music only">
+            data-video-label="StudioZIO MixRack introduction, two minutes, music only"
+            data-event="video_play" data-ev-product="mixrack">
             <img class="video-poster" src="/assets/media/mixrack-intro-poster.webp" width="1920" height="1080"
               alt="StudioZIO MixRack, coming soon" loading="lazy" decoding="async">
             <span class="video-play"><span class="video-play-icon" aria-hidden="true"></span><span class="video-play-label">Play the preview · </span>1:58</span>
