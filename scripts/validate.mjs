@@ -23,6 +23,7 @@ const bytes = (relative) => readFileSync(resolve(projectRoot, relative));
 /* Hosts this site is allowed to link to. Anything else — including a
    preview deployment or a path that only exists on the hub — is a failure. */
 const ALLOWED_HOSTS = new Set([
+  'www.studiozio.tech',
   'studiozio.vercel.app',
   'studioziomasteringsuite.vercel.app',
   'www.tempodelay.tech',

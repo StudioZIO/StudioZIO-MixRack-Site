@@ -75,6 +75,7 @@ try {
    configured domains: the console list is what drives referral exclusion, and
    a domain missing there still shows up as self-referral traffic. */
 var STUDIOZIO_NETWORK_DOMAINS = [
+  'www.studiozio.tech',
   'studiozio.vercel.app',
   'studioziomasteringsuite.vercel.app',
   'www.tempodelay.tech',

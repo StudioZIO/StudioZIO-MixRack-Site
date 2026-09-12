@@ -13,7 +13,7 @@
 
   /* Rewritten per site when this file is copied: the hub points at its own path and
      navigates to its own page, the other three point at the hub's origin. */
-  var SEARCH_PAGE = 'https://studiozio.vercel.app/search/';
+  var SEARCH_PAGE = 'https://www.studiozio.tech/search/';
 
   /* On the search page itself there is nowhere to jump to: search.js is
      already listening to these same boxes and filtering as they are typed

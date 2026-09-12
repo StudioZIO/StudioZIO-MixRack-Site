@@ -155,7 +155,7 @@ const FOOTER_LINKS = [
 
 /* The header carries the search box itself rather than a link to it. The
    index lives on the hub and covers all four properties, so the box here
-   hands its query to studiozio.vercel.app/search/ -- the same box, in the
+   hands its query to www.studiozio.tech/search/ -- the same box, in the
    same place, on every StudioZIO site. Two copies ship: one in the row, one
    inside the compact menu, because the row is put away on a phone and the
    box should not be. Enter is handled by header-search.js; there is no

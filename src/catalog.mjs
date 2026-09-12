@@ -6,7 +6,7 @@
    release date, no price and no download, so this file states none of those.
    When the hub entry changes, this one changes with it. */
 
-export const HUB_WEBSITE = 'https://studiozio.vercel.app';
+export const HUB_WEBSITE = 'https://www.studiozio.tech';
 export const MASTERING_SUITE_WEBSITE = 'https://studioziomasteringsuite.vercel.app/';
 export const TEMPO_DELAY_WEBSITE = 'https://www.tempodelay.tech/';
 export const ZIO_WEBSITE = 'https://zio-audio.vercel.app/';
