@@ -388,7 +388,7 @@ export function renderMixRack() {
         <div class="panel-float launch-gate" id="release-gate" data-state="waiting"
           data-release-label="Get StudioZIO MixRack 1.0.0">
           <p class="launch-clock" data-countdown aria-live="off"></p>
-          <p class="launch-note" data-launch-note>Release date is being confirmed.</p>
+          <p class="launch-note" data-launch-note>Releasing on 29 September 2026.</p>
           <p class="launch-action" data-release>
             <a class="btn btn-primary btn-armed" data-release-link aria-disabled="true">Get StudioZIO MixRack 1.0.0</a>
           </p>
