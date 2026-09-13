@@ -148,10 +148,6 @@ const HEADER_NAVIGATION = [
 const FOOTER_LINKS = [
   ['Hub', `${HUB_WEBSITE}/`, 'hub'],
   ['Products', `${HUB_WEBSITE}/products/`, 'products'],
-  ['Downloads', `${HUB_WEBSITE}/downloads/`, 'downloads'],
-  ['Engineering', `${HUB_WEBSITE}/engineering/`, 'engineering'],
-  ['Support', `${HUB_WEBSITE}/support/`, 'support'],
-  ['Privacy', `${HUB_WEBSITE}/legal/`, 'legal'],
   ['Notes', `${HUB_WEBSITE}/notes/`, 'notes'],
   ['Contact', `${HUB_WEBSITE}/contact/`, 'contact'],
   ['Press kit', `${HUB_WEBSITE}/press/`, 'press'],
@@ -327,7 +323,6 @@ export function renderMixRack() {
           <p class="eyebrow">StudioZIO software · Coming Soon</p>
           <h1>StudioZIO MixRack</h1>
           <p><a href="${HUB_WEBSITE}/products/">All StudioZIO products</a></p>
-          <p><a href="${HUB_WEBSITE}/products/mixrack/">MixRack product facts and release authority</a></p>
           <p class="lede">${escapeHtml(mixrack.description)} Build a signal chain from StudioZIO processing modules and shape a mix from one unified interface.</p>
           <div class="chip-row mt-lg">
             ${chip(mixrack.manufacturer)}${chip(mixrack.platform)}${chip('Coming Soon', 'flag')}
@@ -420,7 +415,7 @@ export function renderMixRack() {
           <div class="form-row">
             <label class="form-label" for="notify-email">Email <span class="req">required</span></label>
             <input id="notify-email" name="email" class="field" type="email" required autocomplete="email">
-            <p class="form-hint">One message, when StudioZIO MixRack is released. Nothing else is sent to it, and it is not used for anything else. See the <a href="${HUB_WEBSITE}/legal/">privacy notice</a>.</p>
+            <p class="form-hint">One message, when StudioZIO MixRack is released. Nothing else is sent to it, and it is not used for anything else.</p>
           </div>
 
           <p class="form-status" role="status" aria-live="polite"></p>
@@ -514,8 +509,6 @@ export function renderMixRack() {
             <textarea id="tester-note" name="optional_note" class="field field-area" rows="3"></textarea>
             <p class="form-hint">Optional — a sentence is plenty.</p>
           </div>
-
-          <p class="form-hint">Submitted details are used only to evaluate and contact potential testers. See the <a href="${HUB_WEBSITE}/legal/">privacy notice</a>.</p>
 
           <p class="form-status" role="status" aria-live="polite"></p>
 
