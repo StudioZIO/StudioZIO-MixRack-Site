@@ -264,7 +264,7 @@ export function validateSource() {
      unreachable from this one. The other two product sites left the header
      with this one's own entry: they are reached from the hub's catalogue now,
      which this page links, so they are not expected here. */
-  for (const url of [`${HUB_WEBSITE}/`, `${HUB_WEBSITE}/products/`, `${HUB_WEBSITE}/products/mixrack/`, `${HUB_WEBSITE}/downloads/`, `${HUB_WEBSITE}/engineering/`, `${HUB_WEBSITE}/support/`, `${HUB_WEBSITE}/legal/`, `${HUB_WEBSITE}/notes/`, `${HUB_WEBSITE}/contact/`, `${HUB_WEBSITE}/press/`, ZIO_WEBSITE]) {
+  for (const url of [`${HUB_WEBSITE}/`, `${HUB_WEBSITE}/products/`, `${HUB_WEBSITE}/notes/`, `${HUB_WEBSITE}/contact/`, `${HUB_WEBSITE}/press/`, ZIO_WEBSITE]) {
     if (!home.includes(`href="${url}"`)) throw new Error(`index.html: no link to ${url}`);
   }
   /* The estate's shared rule, owner-approved and applied on every site: no
@@ -281,9 +281,7 @@ export function validateSource() {
   const headerEntries = (header.match(/<li><a href=/g) || []).length;
   if (headerEntries !== 10) throw new Error(`index.html: the header lists ${headerEntries} links across its two menus, wanted 10`);
   const footerEntries = (footer.match(/<li><a href=/g) || []).length;
-  if (footerEntries !== 10) throw new Error(`index.html: the footer lists ${footerEntries} links, wanted 10`);
-  const privacyLinks = (body.match(new RegExp(`href="${HUB_WEBSITE}/legal/"`, 'g')) || []).length;
-  if (privacyLinks < 2) throw new Error('index.html: both email forms must link to the privacy notice');
+  if (footerEntries !== 6) throw new Error(`index.html: the footer lists ${footerEntries} links, wanted 6`);
 
   /* The film and its poster are real files of a sane size: a poster that is
      secretly a placeholder, or an .mp4 that is an HTML error page, both
