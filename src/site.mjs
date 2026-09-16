@@ -79,7 +79,11 @@ function formatList(items) {
   return `${escapeHtml(list.join(', '))} and ${escapeHtml(last)}`;
 }
 
-function logo({ href = '/', suffix = '', link = true } = {}) {
+/* The wordmark says StudioZIO, so it goes to StudioZIO: the hub, from every
+   property. It used to return to this site's own home page, which meant the
+   same mark did a different thing here than on the other properties. The Hub
+   link in the menu says the same thing in words; this says it in the mark. */
+function logo({ href = `${HUB_WEBSITE}/`, suffix = '', link = true } = {}) {
   const label = `StudioZIO${suffix ? ` ${suffix}` : ''}`;
   const open = link
     ? `<a class="logo" href="${escapeHtml(href)}" aria-label="${escapeHtml(label)}">`
