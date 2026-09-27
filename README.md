@@ -39,23 +39,24 @@ No dependencies. Node 20+ and the standard library; `dist/` is static.
 ## Link ownership
 
 The header and the footer are the estate's own lists, identical to the ones
-the other StudioZIO sites carry, with two owner-approved changes that apply
-to every site: MixRack joins the header, and the footer carries no product
-links. The validator enforces both, plus the rule that nothing on this site
-is a hub path pretending to be a local one.
+the other StudioZIO sites carry. The owner-approved rule that applies to every
+site: no product link in the header or the footer. The product sites are
+reached from the hub's catalogue (`/products/`), and the header's search box
+finds them by name. `scripts/validate.mjs` enforces it (no Mastering Suite or
+Tempo Delay link in either list, ten header entries across the row and the
+compact menu, six footer entries), plus the rule that nothing on this site is
+a hub path pretending to be a local one.
 
 | Link | Kind | Destination |
 | --- | --- | --- |
-| MixRack (header) | LOCAL_MIXRACK | `/` |
+| StudioZIO mark | STUDIOZIO_HUB | `www.studiozio.tech/` |
 | Hub, Products, Notes, Community, Contact, Press kit | STUDIOZIO_HUB | absolute `www.studiozio.tech/...` URLs |
-| Mastering Suite (header) | EXTERNAL | studioziomasteringsuite.vercel.app |
-| Tempo Delay (header) | EXTERNAL | www.tempodelay.tech |
 | ZIO (footer) | EXTERNAL | zio-audio.vercel.app |
 | Instagram, YouTube, KVR ×2 | EXTERNAL | opened in a new tab, `rel="noopener noreferrer"` |
 
-Header: Hub · Products · Mastering Suite · Tempo Delay · MixRack · Notes ·
-Community · Contact. Footer: Hub · Products · Notes · Contact · Press kit ·
-ZIO.
+Header: Hub · Products · Notes · Community · Contact, then the search box
+(its query goes to `www.studiozio.tech/search/`). Footer: Hub · Products ·
+Notes · Contact · Press kit · ZIO.
 
 ## Deployment
 
@@ -64,8 +65,10 @@ Vercel project `studioziomixrack`, built with `npm run build` into `dist/`.
 `unsafe-inline`, `form-action 'none'`) and redirects the hub's old path,
 `/products/mixrack`, to `/` so an old link still lands on the product.
 
-The hub keeps its own `/products/mixrack/` page; this site declares the
-canonical for the dedicated domain and nothing else.
+The hub has no MixRack page of its own: its `vercel.json` sends
+`/products/mixrack` and `/products/mixrack/` to this site with a 308, and the
+hub's catalogue card links here. This site is the one product page for
+MixRack and declares the canonical for its own domain.
 
 ## Measurement
 
