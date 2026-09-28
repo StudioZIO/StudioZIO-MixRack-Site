@@ -81,7 +81,7 @@
         }
         form.reset();
         submit.disabled = false;
-        say('sent', 'Thanks — we will email you once, when StudioZIO MixRack is released.');
+        say('sent', 'Thanks — we will email you once, when the next StudioZIO MixRack version is released.');
         report();
       })
       .catch(function () {
