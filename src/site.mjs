@@ -189,7 +189,7 @@ function chip(label, tone = '') {
 }
 
 const SOCIAL_IMAGE = '/assets/og/og-mixrack.png';
-const SOCIAL_IMAGE_ALT = 'StudioZIO MixRack — coming soon';
+const SOCIAL_IMAGE_ALT = 'StudioZIO MixRack 1.0.0, out now for macOS';
 
 /* Structured data ships as a data island, never as executable code: the CSP
    has no 'unsafe-inline' for scripts, and a ld+json block is not executed. */
@@ -221,14 +221,18 @@ const mixrackJsonLd = () =>
       publisher: { '@id': ORGANIZATION_ID }
     },
     {
-      /* No offers, no price, no release date, no download: MixRack has none
-         of those yet, and structured data that claims them is a claim the
-         product cannot honour. */
+      /* The version and the release date are facts now, so they are stated.
+         Still no offers and no price: the hub names none for MixRack, and
+         structured data that invents one is a claim nobody made. No download
+         URL either -- that address is the gate's to hand out, not this
+         page's to publish. */
       '@type': 'SoftwareApplication',
       '@id': `${SITE_ORIGIN}/#mixrack`,
       name: mixrack.name,
       url: `${SITE_ORIGIN}/`,
       description: `${mixrack.description} ${mixrack.availability}.`,
+      softwareVersion: mixrack.version,
+      datePublished: '2026-09-29',
       operatingSystem: mixrack.platform,
       applicationCategory: 'MultimediaApplication',
       publisher: { '@id': ORGANIZATION_ID }
@@ -308,15 +312,19 @@ function shell({ title, description, canonical, current, content, scripts = '', 
 }
 
 /* The page. Section for section, this is the hub's renderMixRack: hero,
-   preview film, planned formats, release notice, testing interest. The copy
+   preview film, formats, download, release notice, testing interest. The copy
    is the hub's copy. The only edits are the ones the move forces — the
    "All StudioZIO products" link is now an absolute hub URL, and each section
-   carries the id its own header link points at. */
+   carries the id its own header link points at.
+
+   Everything here speaks in the past tense of a shipped product, because it
+   is one: MixRack 1.0.0 went out on 29 September 2026. The download button
+   still gets its address from /api/release/ rather than from this file. */
 export function renderMixRack() {
   return shell({
-    title: 'StudioZIO MixRack — Coming Soon',
+    title: 'StudioZIO MixRack 1.0.0 — Out now',
     description:
-      'StudioZIO MixRack is a modular mixing environment for macOS, coming soon from StudioZIO in AU, VST3, AAX and Standalone formats.',
+      'StudioZIO MixRack 1.0.0 is out: a modular mixing environment for macOS in AU, VST3, AAX and Standalone formats, Universal and notarized.',
     canonical: `${SITE_ORIGIN}/`,
     current: 'mixrack',
     jsonLd: mixrackJsonLd(),
@@ -324,13 +332,14 @@ export function renderMixRack() {
     content: `<section class="hero tech-grid">
       <div class="shell">
         <div class="rise">
-          <p class="eyebrow">StudioZIO software · Coming Soon</p>
+          <p class="eyebrow">StudioZIO software · Available now</p>
           <h1>StudioZIO MixRack</h1>
           <p><a href="${HUB_WEBSITE}/products/">All StudioZIO products</a></p>
           <p class="lede">${escapeHtml(mixrack.description)} Build a signal chain from StudioZIO processing modules and shape a mix from one unified interface.</p>
           <div class="chip-row mt-lg">
-            ${chip(mixrack.manufacturer)}${chip(mixrack.platform)}${chip('Coming Soon', 'flag')}
+            ${chip(mixrack.manufacturer)}${chip(mixrack.platform)}${chip(`Version ${mixrack.version}`)}${chip('Available now', 'flag')}
           </div>
+          <p class="mt-lg"><a class="btn btn-primary" href="#launch">Download StudioZIO MixRack ${escapeHtml(mixrack.version)}</a></p>
         </div>
       </div>
     </section>
@@ -343,13 +352,13 @@ export function renderMixRack() {
         <div class="section-head">
           <p class="eyebrow">Preview</p>
           <h2 id="mixrack-video-title">A look inside the rack</h2>
-          <p class="lede">Two minutes with the MixRack window as it stands in development: the eight modules, the module browser, reordering, factory presets, A/B and the output meters.</p>
+          <p class="lede">Two minutes with the MixRack window: the eight modules, the module browser, reordering, factory presets, A/B and the output meters.</p>
         </div>
         <figure class="panel-float video-card">
           <button class="video-facade" type="button" data-video-src="/assets/media/mixrack-intro.mp4"
             data-video-label="StudioZIO MixRack introduction, two minutes, music only">
             <img class="video-poster" src="/assets/media/mixrack-intro-poster.webp" width="1920" height="1080"
-              alt="StudioZIO MixRack, coming soon" loading="lazy" decoding="async">
+              alt="The StudioZIO MixRack window" loading="lazy" decoding="async">
             <span class="video-play"><span class="video-play-icon" aria-hidden="true"></span><span class="video-play-label">Play the preview · </span>1:58</span>
           </button>
           <noscript>
@@ -365,50 +374,53 @@ export function renderMixRack() {
     <section class="section" id="formats" aria-labelledby="mixrack-spec-title">
       <div class="shell">
         <div class="section-head">
-          <p class="eyebrow">Planned formats</p>
-          <h2 id="mixrack-spec-title">Coming Soon</h2>
-          <p class="lede">StudioZIO MixRack 1.0.0 is prepared for public launch. Release details are published when the launch is announced.</p>
+          <p class="eyebrow">Formats</p>
+          <h2 id="mixrack-spec-title">What ships</h2>
+          <p class="lede">StudioZIO MixRack ${escapeHtml(mixrack.version)} was released on 29 September 2026. The installer is Developer ID signed and notarized by Apple, and AAX has been validated in Pro Tools.</p>
         </div>
         <dl class="spec-grid">
           <div><dt>Manufacturer</dt><dd>${escapeHtml(mixrack.manufacturer)}</dd></div>
-          <div><dt>Platform</dt><dd>${escapeHtml(mixrack.platform)}</dd></div>
-          <div><dt>Status</dt><dd>Coming Soon</dd></div>
-          <div class="spec-span"><dt>Planned formats</dt><dd>${formatList(mixrack.formats)}</dd></div>
+          <div><dt>Version</dt><dd>${escapeHtml(mixrack.version)}</dd></div>
+          <div><dt>Platform</dt><dd>${escapeHtml(mixrack.minimumOs)}</dd></div>
+          <div><dt>Architecture</dt><dd>${escapeHtml(mixrack.architecture)}</dd></div>
+          <div><dt>Status</dt><dd>Available now</dd></div>
+          <div class="spec-span"><dt>Formats</dt><dd>${formatList(mixrack.formats)}</dd></div>
         </dl>
       </div>
     </section>
-    <!-- The gate. The button is here from the first day and stays dim until the
-         server says otherwise: a control that appears out of nowhere at launch
-         is a control nobody was waiting for. It carries no href until then,
-         which is also why it cannot be found early -- the address is not in
-         this page, it arrives from /api/release/ when that endpoint decides. -->
+    <!-- The gate, now open. The address is still not in this page: it arrives
+         from /api/release/, which is what kept it unfindable before the launch
+         instant and is now simply how the button is filled in. The markup below
+         is the pre-launch state; countdown.js replaces the note and arms the
+         link as soon as the endpoint answers, so a visitor with JavaScript off
+         reads the line below and still has the estate's links. -->
     <section class="section" id="launch" aria-labelledby="mixrack-launch-title">
       <div class="shell">
         <div class="section-head">
-          <p class="eyebrow">Public launch</p>
-          <h2 id="mixrack-launch-title">Counting down</h2>
-          <p class="lede">StudioZIO MixRack 1.0.0 is prepared for public launch. The installer becomes available here the moment the countdown reaches zero.</p>
+          <p class="eyebrow">Download</p>
+          <h2 id="mixrack-launch-title">Out now</h2>
+          <p class="lede">StudioZIO MixRack ${escapeHtml(mixrack.version)} is released. It runs on ${escapeHtml(mixrack.minimumOs)}, Universal on Apple Silicon and Intel, and installs as AU, VST3, AAX and Standalone.</p>
         </div>
         <div class="panel-float launch-gate" id="release-gate" data-state="waiting"
           data-release-label="Get StudioZIO MixRack 1.0.0">
           <p class="launch-clock" data-countdown aria-live="off"></p>
-          <p class="launch-note" data-launch-note>Releasing on 29 September 2026.</p>
+          <p class="launch-note" data-launch-note>Released on 29 September 2026.</p>
           <p class="launch-action" data-release>
             <a class="btn btn-primary btn-armed" data-release-link aria-disabled="true">Get StudioZIO MixRack 1.0.0</a>
           </p>
           <p class="launch-status sr-only" role="status" aria-live="polite"></p>
         </div>
         <noscript>
-          <p class="form-note">The launch countdown needs JavaScript. Without it this page cannot tell you whether StudioZIO MixRack has shipped yet — the release notice form below will reach you either way.</p>
+          <p class="form-note">The download button needs JavaScript: the installer's address is held by this site's server and fetched when the page loads, so with JavaScript off there is nothing to click. StudioZIO MixRack ${escapeHtml(mixrack.version)} is out; please switch JavaScript on for this page rather than assuming the download is gone.</p>
         </noscript>
       </div>
     </section>
     <section class="section" id="release-notice" aria-labelledby="mixrack-notify-title">
       <div class="shell">
         <div class="section-head">
-          <p class="eyebrow">Release notice</p>
-          <h2 id="mixrack-notify-title">Hear about it once</h2>
-          <p class="lede">StudioZIO MixRack 1.0.0 is prepared for public launch. Leave an address and it gets used exactly once — on the day it ships.</p>
+          <p class="eyebrow">Update notice</p>
+          <h2 id="mixrack-notify-title">Hear about the next one</h2>
+          <p class="lede">StudioZIO MixRack ${escapeHtml(mixrack.version)} is out and needs no sign-up to download. Leave an address and it gets used once more — on the day the next MixRack version ships.</p>
         </div>
         <form class="panel-float notify-form" novalidate="false">
           <div class="form-hp" aria-hidden="true">
@@ -419,13 +431,13 @@ export function renderMixRack() {
           <div class="form-row">
             <label class="form-label" for="notify-email">Email <span class="req">required</span></label>
             <input id="notify-email" name="email" class="field" type="email" required autocomplete="email">
-            <p class="form-hint">One message, when StudioZIO MixRack is released. Nothing else is sent to it, and it is not used for anything else.</p>
+            <p class="form-hint">One message, when the next StudioZIO MixRack version is released. Nothing else is sent to it, and it is not used for anything else.</p>
           </div>
 
           <p class="form-status" role="status" aria-live="polite"></p>
 
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Notify me at release</button>
+            <button type="submit" class="btn btn-primary">Notify me at the next release</button>
           </div>
         </form>
 
@@ -439,7 +451,7 @@ export function renderMixRack() {
         <div class="section-head">
           <p class="eyebrow">Testing interest</p>
           <h2 id="mixrack-tester-title">Interested in testing MixRack?</h2>
-          <p class="lede">StudioZIO MixRack 1.0.0 is prepared for public launch, and no test build is being distributed yet. A small tester pool is being assembled, and selected people may be contacted for a future beta or release-candidate build. Submitting interest does not guarantee selection, and the details below are used only to evaluate and contact potential testers.</p>
+          <p class="lede">StudioZIO MixRack ${escapeHtml(mixrack.version)} is out, and this is not how to get it — the download is above and needs nothing from you. A small tester pool is being assembled for future beta and release-candidate builds, and selected people may be contacted about those. Submitting interest does not guarantee selection, and the details below are used only to evaluate and contact potential testers.</p>
         </div>
         <form class="panel-float tester-form" novalidate="false">
           <div class="form-hp" aria-hidden="true">

@@ -6,7 +6,8 @@
      /notes/ here is a 404, not a note);
    - the canonical, og:url and sitemap must name this domain, not the hub's
      /products/mixrack/ URL the page came from;
-   - MixRack is unreleased, so no price, no "free", no buy, no pre-order.
+   - MixRack is released but the hub names no price for it, so no price, no
+     "free", no buy, no pre-order until the hub says one.
 
    Run with `npm run lint`; scripts/build.mjs calls it before writing dist/. */
 
@@ -43,7 +44,7 @@ const FORBIDDEN = [
   [/\btestimonial\b/i, 'a testimonial'],
   [/\baward-winning\b/i, 'an award claim'],
   [/\bbenchmark\b/i, 'a benchmark claim'],
-  [/\bfree\b/i, 'a price claim (MixRack is unreleased)'],
+  [/\bfree\b/i, 'a price claim (the hub names no price for MixRack)'],
   [/\$\s?\d/, 'a price'],
   [/\bpre-?order\b/i, 'a pre-order claim'],
   /* The hub moved to its own domain; nothing rendered should still name the
@@ -94,7 +95,10 @@ const REQUIRED_FACTS = [
   'VST3',
   'AAX',
   'Standalone',
-  'Coming Soon',
+  /* The page's release state, asserted as text. It read "Coming Soon" until
+     29 September 2026; the moment the gate opened, a page still saying that
+     was the failure, so the required fact is now the true one. */
+  'Available now',
   'macOS'
 ];
 
@@ -197,11 +201,12 @@ function checkLinks(name, page, homeIds) {
 }
 
 export function validateSource() {
-  if (mixrack.availability !== 'Coming soon') throw new Error('MixRack availability drift');
+  if (mixrack.availability !== 'Available now') throw new Error('MixRack availability drift');
+  if (!/^\d+\.\d+\.\d+$/.test(mixrack.version)) throw new Error('MixRack version drift');
   if (mixrack.formats.join(' / ') !== 'Audio Unit (AU) / VST3 / AAX / Standalone') {
-    throw new Error('MixRack planned formats drift — the hub lists AU, VST3, AAX and Standalone');
+    throw new Error('MixRack format drift — the hub lists AU, VST3, AAX and Standalone');
   }
-  if (mixrack.compactFormats !== 'AU / VST3 / AAX / Standalone') throw new Error('Compact format list drift');
+  if (mixrack.compactFormats !=='AU / VST3 / AAX / Standalone') throw new Error('Compact format list drift');
 
   const home = renderMixRack();
   const notFound = renderNotFound();
