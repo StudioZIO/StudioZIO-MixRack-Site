@@ -72,8 +72,7 @@ export { MEASUREMENT_ID };
    metadata__source differs, so the list records that a sign-up came from
    this site. Buttondown's embed endpoint must be the action of a native
    <form> (its docs rule out fetch), which is why vercel.json's form-action
-   names https://buttondown.com and nothing else. The Formspree tester form below
-   is untouched and still posts by fetch.
+   names https://buttondown.com and nothing else. This site has no other forms.
    The consent wording is versioned: change the text, change the date, and
    change it on the hub first. */
 export const EARLY_ACCESS_ENDPOINT = 'https://buttondown.com/api/emails/embed-subscribe/studiozio';
@@ -368,8 +367,8 @@ function earlyAccessSignup() {
 }
 
 /* The page. Section for section, this is the hub's renderMixRack: hero,
-   preview film, formats, download (with the Early Access box under it),
-   release notice, testing interest. The copy
+   preview film, formats, download (with the Early Access box under it).
+   The copy
    is the hub's copy. The only edits are the ones the move forces — the
    "All StudioZIO products" link is now an absolute hub URL, and each section
    carries the id its own header link points at.
@@ -385,7 +384,7 @@ export function renderMixRack() {
     canonical: `${SITE_ORIGIN}/`,
     current: 'mixrack',
     jsonLd: mixrackJsonLd(),
-    scripts: '<script src="/assets/tester.js" defer></script><script src="/assets/video.js" defer></script><script src="/assets/countdown.js" defer></script>' + EARLY_ACCESS_SCRIPT,
+    scripts: '<script src="/assets/video.js" defer></script><script src="/assets/countdown.js" defer></script>' + EARLY_ACCESS_SCRIPT,
     content: `<section class="hero tech-grid">
       <div class="shell">
         <div class="rise">
@@ -470,98 +469,6 @@ export function renderMixRack() {
         <noscript>
           <p class="form-note">The download button needs JavaScript: the installer's address is held by this site's server and fetched when the page loads, so with JavaScript off there is nothing to click. StudioZIO MixRack ${escapeHtml(mixrack.version)} is out; please switch JavaScript on for this page rather than assuming the download is gone.</p>
         </noscript>${earlyAccessSignup()}
-      </div>
-    </section>
-    <section class="section" id="testing" aria-labelledby="mixrack-tester-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="eyebrow">Testing interest</p>
-          <h2 id="mixrack-tester-title">Interested in testing MixRack?</h2>
-          <p class="lede">StudioZIO MixRack ${escapeHtml(mixrack.version)} is out, and this is not how to get it — the download is above and needs nothing from you. A small tester pool is being assembled for future beta and release-candidate builds, and selected people may be contacted about those. Submitting interest does not guarantee selection, and the details below are used only to evaluate and contact potential testers.</p>
-        </div>
-        <form class="panel-float tester-form" novalidate="false">
-          <div class="form-hp" aria-hidden="true">
-            <label for="tester-company">Company</label>
-            <input id="tester-company" name="company" type="text" tabindex="-1" autocomplete="off">
-          </div>
-
-          <div class="form-grid form-grid--2">
-            <div class="form-row">
-              <label class="form-label" for="tester-email">Email <span class="req">required</span></label>
-              <input id="tester-email" name="email" class="field" type="email" required autocomplete="email">
-            </div>
-            <div class="form-row">
-              <label class="form-label" for="tester-daw">Primary DAW <span class="req">required</span></label>
-              <input id="tester-daw" name="daw" class="field field-mono" type="text" required placeholder="Logic Pro">
-            </div>
-          </div>
-
-          <div class="form-grid form-grid--2">
-            <div class="form-row">
-              <label class="form-label" for="tester-macos">macOS version <span class="req">required</span></label>
-              <input id="tester-macos" name="macos_version" class="field field-mono" type="text" required placeholder="macOS 14">
-            </div>
-            <div class="form-row">
-              <label class="form-label" for="tester-architecture">Mac architecture <span class="req">required</span></label>
-              <select id="tester-architecture" name="architecture" class="field" required>
-                <option value="">Select…</option>
-                <option value="Apple Silicon">Apple Silicon</option>
-                <option value="Intel">Intel</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-grid form-grid--3">
-            <div class="form-row">
-              <label class="form-label" for="tester-experience">Experience</label>
-              <select id="tester-experience" name="experience" class="field">
-                <option value="">Prefer not to say</option>
-                <option value="Producer">Producer</option>
-                <option value="Mixing engineer">Mixing engineer</option>
-                <option value="Mastering engineer">Mastering engineer</option>
-                <option value="Developer / technical user">Developer / technical user</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <label class="form-label" for="tester-phase">Interested in</label>
-              <select id="tester-phase" name="phase_interest" class="field">
-                <option value="either">Either</option>
-                <option value="beta">Beta</option>
-                <option value="release-candidate">Release Candidate</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <label class="form-label" for="tester-focus">Testing focus</label>
-              <select id="tester-focus" name="testing_focus" class="field">
-                <option value="">No preference</option>
-                <option value="Workflow / usability">Workflow / usability</option>
-                <option value="Stability / crashes">Stability / crashes</option>
-                <option value="DAW compatibility">DAW compatibility</option>
-                <option value="CPU / performance">CPU / performance</option>
-                <option value="Automation / recall">Automation / recall</option>
-                <option value="General use">General use</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <label class="form-label" for="tester-note">What would you most want to test?</label>
-            <textarea id="tester-note" name="optional_note" class="field field-area" rows="3"></textarea>
-            <p class="form-hint">Optional — a sentence is plenty.</p>
-          </div>
-
-          <p class="form-status" role="status" aria-live="polite"></p>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Register testing interest</button>
-          </div>
-        </form>
-
-        <noscript>
-          <p class="form-note">This form needs JavaScript to send. With it switched off nothing is submitted, so please enable it for this page rather than assuming your interest was recorded.</p>
-        </noscript>
       </div>
     </section>`
   });

@@ -83,7 +83,7 @@ export function checkEveryScriptThePageLoadsExists() {
 function checkReleaseGateHidesItsSecrets() {
   const files = [
     'api/release.js', 'src/countdown.js', 'src/site.mjs',
-    'src/tester.js', 'src/video.js', 'src/early-access.js'
+    'src/video.js', 'src/early-access.js'
   ];
   for (const file of files) {
     let body;
@@ -319,7 +319,7 @@ export function validateSource() {
     if (/sonavyr/i.test(text)) throw new Error(`${file}: names the unreleased product`);
   }
 
-  for (const script of ['tester.js', 'video.js', 'early-access.js']) {
+  for (const script of ['video.js', 'early-access.js']) {
     if (!home.includes(`/assets/${script}`)) throw new Error(`index.html: ${script} is not loaded`);
     statSync(resolve(projectRoot, 'src', script));
   }
