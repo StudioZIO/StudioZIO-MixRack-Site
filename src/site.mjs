@@ -64,6 +64,25 @@ const analytics = `<script src="/assets/gtag.js"></script>
 
 export { MEASUREMENT_ID };
 
+/* StudioZIO Early Access -- the hub's pre-registration mailing list, offered
+   here too, directly under the download box (owner's call, 1 October 2026).
+
+   Same list, same wording, same consent version as the hub's /early-access/
+   page and the box under each of its product downloads; only
+   metadata__source differs, so the list records that a sign-up came from
+   this site. Buttondown's embed endpoint must be the action of a native
+   <form> (its docs rule out fetch), which is why vercel.json's form-action
+   names https://buttondown.com and nothing else. The Formspree forms below
+   are untouched and still post by fetch.
+   The consent wording is versioned: change the text, change the date, and
+   change it on the hub first. */
+export const EARLY_ACCESS_ENDPOINT = 'https://buttondown.com/api/emails/embed-subscribe/studiozio';
+export const EARLY_ACCESS_CONSENT_VERSION = '2026-09-21';
+export const EARLY_ACCESS_SOURCE = `${SITE_ORIGIN.replace(/^https:\/\//, '')}/`;
+const EARLY_ACCESS_CONSENT_TEXT =
+  'I want to receive StudioZIO Early Access emails about product updates, release news and testing opportunities. I can unsubscribe at any time.';
+const EARLY_ACCESS_SCRIPT = '<script src="/assets/early-access.js" defer></script>';
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -164,7 +183,7 @@ const FOOTER_LINKS = [
    same place, on every StudioZIO site. Two copies ship: one in the row, one
    inside the compact menu, because the row is put away on a phone and the
    box should not be. Enter is handled by header-search.js; there is no
-   <form> because form-action is 'none'. */
+   <form> because form-action names Buttondown and nothing else. */
 function headerSearch(variant) {
   return `<div class="header-search${variant ? ` header-search--${variant}` : ''}">
           <input class="field header-search-field" type="search" name="q" aria-label="Search StudioZIO" placeholder="Search" autocomplete="off" autocapitalize="off" spellcheck="false">
@@ -311,8 +330,46 @@ function shell({ title, description, canonical, current, content, scripts = '', 
 </html>`;
 }
 
+/* The Early Access box. After the download, never in front of it: the
+   download needs no email, and the box says so by sitting below the button
+   rather than between the visitor and it. The privacy link is the hub's
+   policy, which names Buttondown; this site has no policy page of its own.
+   One form per page, so the ids stay fixed. */
+function earlyAccessSignup() {
+  return `
+        <form class="panel-float early-access-form mt-md" action="${escapeHtml(EARLY_ACCESS_ENDPOINT)}" method="post" aria-labelledby="ea-title">
+          <input type="hidden" name="metadata__consent_version" value="${EARLY_ACCESS_CONSENT_VERSION}">
+          <input type="hidden" name="metadata__source" value="${escapeHtml(EARLY_ACCESS_SOURCE)}">
+
+          <p class="eyebrow">Early Access</p>
+          <h3 id="ea-title">StudioZIO Early Access</h3>
+          <p class="lede">Join StudioZIO Early Access for product updates, release news and future testing opportunities.</p>
+          <p class="lede">It is an email list and nothing more: it costs nothing, and signing up does not reserve a product, a price, a discount, a release date or a place in any test.</p>
+
+          <div class="form-row">
+            <label class="form-label" for="ea-email">Email <span class="req">required</span></label>
+            <input id="ea-email" name="email" class="field" type="email" required autocomplete="email" aria-describedby="ea-email-hint">
+            <p class="form-hint" id="ea-email-hint">Used only for StudioZIO Early Access emails.</p>
+          </div>
+
+          <div class="form-check">
+            <input id="ea-consent" name="metadata__consent" type="checkbox" value="True" required>
+            <label for="ea-consent">${escapeHtml(EARLY_ACCESS_CONSENT_TEXT)} <span class="req">required</span></label>
+          </div>
+
+          <p class="form-hint">After you join, Buttondown sends an email asking you to confirm your address; nothing else arrives until you do. Every email has an unsubscribe link. Buttondown, a US-based newsletter service, stores the list and sends the emails. See the <a href="${HUB_WEBSITE}/privacy/">privacy policy</a>.</p>
+
+          <p class="form-status" role="status" aria-live="polite"></p>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Join Early Access</button>
+          </div>
+        </form>`;
+}
+
 /* The page. Section for section, this is the hub's renderMixRack: hero,
-   preview film, formats, download, release notice, testing interest. The copy
+   preview film, formats, download (with the Early Access box under it),
+   release notice, testing interest. The copy
    is the hub's copy. The only edits are the ones the move forces — the
    "All StudioZIO products" link is now an absolute hub URL, and each section
    carries the id its own header link points at.
@@ -328,7 +385,7 @@ export function renderMixRack() {
     canonical: `${SITE_ORIGIN}/`,
     current: 'mixrack',
     jsonLd: mixrackJsonLd(),
-    scripts: '<script src="/assets/notify.js" defer></script><script src="/assets/tester.js" defer></script><script src="/assets/video.js" defer></script><script src="/assets/countdown.js" defer></script>',
+    scripts: '<script src="/assets/notify.js" defer></script><script src="/assets/tester.js" defer></script><script src="/assets/video.js" defer></script><script src="/assets/countdown.js" defer></script>' + EARLY_ACCESS_SCRIPT,
     content: `<section class="hero tech-grid">
       <div class="shell">
         <div class="rise">
@@ -412,7 +469,7 @@ export function renderMixRack() {
         </div>
         <noscript>
           <p class="form-note">The download button needs JavaScript: the installer's address is held by this site's server and fetched when the page loads, so with JavaScript off there is nothing to click. StudioZIO MixRack ${escapeHtml(mixrack.version)} is out; please switch JavaScript on for this page rather than assuming the download is gone.</p>
-        </noscript>
+        </noscript>${earlyAccessSignup()}
       </div>
     </section>
     <section class="section" id="release-notice" aria-labelledby="mixrack-notify-title">

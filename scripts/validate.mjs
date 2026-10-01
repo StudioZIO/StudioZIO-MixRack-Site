@@ -15,7 +15,16 @@ import { readFileSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mixrack, HUB_WEBSITE, MASTERING_SUITE_WEBSITE, TEMPO_DELAY_WEBSITE, ZIO_WEBSITE } from '../src/catalog.mjs';
-import { MEASUREMENT_ID, SITE_ORIGIN, STYLESHEET_FILE, renderMixRack, renderNotFound } from '../src/site.mjs';
+import {
+  EARLY_ACCESS_CONSENT_VERSION,
+  EARLY_ACCESS_ENDPOINT,
+  EARLY_ACCESS_SOURCE,
+  MEASUREMENT_ID,
+  SITE_ORIGIN,
+  STYLESHEET_FILE,
+  renderMixRack,
+  renderNotFound
+} from '../src/site.mjs';
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (relative) => readFileSync(resolve(projectRoot, relative), 'utf8');
@@ -74,7 +83,7 @@ export function checkEveryScriptThePageLoadsExists() {
 function checkReleaseGateHidesItsSecrets() {
   const files = [
     'api/release.js', 'src/countdown.js', 'src/site.mjs',
-    'src/notify.js', 'src/tester.js', 'src/video.js'
+    'src/notify.js', 'src/tester.js', 'src/video.js', 'src/early-access.js'
   ];
   for (const file of files) {
     let body;
@@ -143,8 +152,16 @@ function checkDocument(name, page, { canonical = null } = {}) {
   if (headings.length !== 1) throw new Error(`${name}: found ${headings.length} <h1> elements, wanted exactly one`);
 
   if (/\sstyle="/.test(page)) throw new Error(`${name}: inline style attribute (the CSP forbids it)`);
-  if (/<form[^>]*\saction=/i.test(page)) {
-    throw new Error(`${name}: a form carries an action, but the CSP sets form-action 'none'`);
+  /* form-action names Buttondown and nothing else, so a native POST anywhere
+     else is refused silently -- the form renders, validates, submits, and
+     goes nowhere. The one form allowed an action is the Early Access box,
+     posting to exactly Buttondown's embed endpoint; Buttondown accepts only a
+     native POST there. Every other form posts by fetch and carries none. */
+  for (const [, attrs] of page.matchAll(/<form([^>]*)>/gi)) {
+    if (attrs.includes(`action="${EARLY_ACCESS_ENDPOINT}"`) && /\bmethod="post"/.test(attrs)) continue;
+    if (/\saction=/i.test(attrs)) {
+      throw new Error(`${name}: a form carries an action the CSP's form-action refuses: <form${attrs}>`);
+    }
   }
 
   for (const [pattern, what] of FORBIDDEN) {
@@ -256,7 +273,53 @@ export function validateSource() {
   }
   if (!body.includes('preload="none"')) throw new Error('index.html: the <noscript> fallback must not preload');
 
-  for (const script of ['notify.js', 'tester.js', 'video.js']) {
+  /* The Early Access box under the download: exactly one, after the download
+     panel rather than in front of it (the download needs no email), tagged
+     with this site as its source, consent required and never pre-ticked,
+     the hub's privacy policy linked, its script loaded, and the same consent
+     version the hub records. Not on the 404. */
+  const eaOpen = '<form class="panel-float early-access-form';
+  const eaForms = (body.match(new RegExp(eaOpen, 'g')) || []).length;
+  if (eaForms !== 1) throw new Error(`index.html: ${eaForms} Early Access forms, wanted exactly one`);
+  if (mainContent(notFound).includes(eaOpen)) throw new Error('404.html: the Early Access form belongs under the download');
+  const gateAt = body.indexOf('id="release-gate"');
+  const eaAt = body.indexOf(eaOpen);
+  if (gateAt < 0 || body.lastIndexOf('data-release-link') > eaAt) {
+    throw new Error('index.html: the Early Access box must sit under the download panel, not above it');
+  }
+  /* Directly under: nothing but the gate's own <noscript> note between them,
+     so no section, heading or other form can end up in the way. */
+  const between = body.slice(body.indexOf('</div>', body.lastIndexOf('launch-status')) + '</div>'.length, eaAt);
+  if (between.replace(/<noscript>[\s\S]*?<\/noscript>/g, '').trim() !== '') {
+    throw new Error('index.html: the Early Access box must follow the download panel directly');
+  }
+  const eaBox = body.slice(eaAt, body.indexOf('</form>', eaAt));
+  if (!eaBox.includes(`action="${EARLY_ACCESS_ENDPOINT}" method="post"`)) {
+    throw new Error('index.html: the Early Access box must post natively to Buttondown');
+  }
+  if (EARLY_ACCESS_SOURCE !== 'studioziomixrack.vercel.app/') throw new Error(`Early Access source drift: ${EARLY_ACCESS_SOURCE}`);
+  if (!eaBox.includes(`name="metadata__source" value="${EARLY_ACCESS_SOURCE}"`)) {
+    throw new Error('index.html: the Early Access box must record its source');
+  }
+  if (EARLY_ACCESS_CONSENT_VERSION !== '2026-09-21'
+    || !eaBox.includes(`name="metadata__consent_version" value="${EARLY_ACCESS_CONSENT_VERSION}"`)) {
+    throw new Error('index.html: the Early Access consent version must be the hub\'s, 2026-09-21');
+  }
+  if (!eaBox.includes('I want to receive StudioZIO Early Access emails about product updates, release news and testing opportunities. I can unsubscribe at any time.')) {
+    throw new Error('index.html: the Early Access consent wording drifted from the hub\'s');
+  }
+  if (/<input[^>]*type="checkbox"[^>]*\bchecked\b/.test(eaBox)) throw new Error('index.html: Early Access consent must not be pre-ticked');
+  if (!/<input[^>]*id="ea-consent"[^>]*\brequired\b/.test(eaBox)) throw new Error('index.html: Early Access consent must be required');
+  if (!/<input[^>]*name="email"[^>]*\brequired\b/.test(eaBox)) throw new Error('index.html: the Early Access email must be required');
+  if (!eaBox.includes(`href="${HUB_WEBSITE}/privacy/"`)) throw new Error('index.html: the Early Access box must link the privacy policy');
+  if (!eaBox.includes('class="form-status"')) throw new Error('index.html: the Early Access box has no status line');
+  if (!home.includes('src="/assets/early-access.js"')) throw new Error('index.html: the Early Access form ships without its script');
+  if (!read('src/early-access.js').includes("'early_access_submit'")) throw new Error('early-access.js: the sign-up is not measured');
+  for (const [file, text] of [['index.html', home], ['404.html', notFound], ['src/early-access.js', read('src/early-access.js')]]) {
+    if (/sonavyr/i.test(text)) throw new Error(`${file}: names the unreleased product`);
+  }
+
+  for (const script of ['notify.js', 'tester.js', 'video.js', 'early-access.js']) {
     if (!home.includes(`/assets/${script}`)) throw new Error(`index.html: ${script} is not loaded`);
     statSync(resolve(projectRoot, 'src', script));
   }
@@ -310,9 +373,21 @@ export function validateSource() {
      switch the forms or the tag off. */
   const vercel = JSON.parse(read('vercel.json'));
   const csp = vercel.headers[0].headers.find((header) => header.key === 'Content-Security-Policy').value;
-  for (const directive of ["default-src 'self'", 'https://formspree.io', 'https://www.googletagmanager.com', "form-action 'none'", "frame-ancestors 'none'"]) {
+  for (const directive of ["default-src 'self'", 'https://formspree.io', 'https://www.googletagmanager.com', "frame-ancestors 'none'"]) {
     if (!csp.includes(directive)) throw new Error(`vercel.json: the CSP no longer carries ${directive}`);
   }
+  /* form-action is Buttondown and only Buttondown: the Early Access box is
+     the one native POST on the site. Anything wider lets a stray form post
+     somewhere nobody chose; 'none' would refuse the sign-up silently. */
+  const formAction = (csp.split(';').map((part) => part.trim()).find((part) => part.startsWith('form-action ')) ?? '').slice('form-action '.length);
+  if (formAction !== 'https://buttondown.com') {
+    throw new Error(`vercel.json: CSP form-action must be https://buttondown.com, it is ${formAction || 'missing'}`);
+  }
+  if (!EARLY_ACCESS_ENDPOINT.startsWith('https://buttondown.com/api/emails/embed-subscribe/')) {
+    throw new Error(`Early Access endpoint is not Buttondown's embed endpoint: ${EARLY_ACCESS_ENDPOINT}`);
+  }
+  const cspRules = vercel.headers.filter((entry) => entry.headers.some((header) => header.key === 'Content-Security-Policy'));
+  if (cspRules.length !== 1) throw new Error('vercel.json: one Content-Security-Policy rule, or the two can disagree on form-action');
   const legacy = (vercel.redirects || []).filter((redirect) => redirect.source.startsWith('/products/mixrack'));
   if (legacy.length !== 2 || legacy.some((redirect) => redirect.destination !== '/')) {
     throw new Error('vercel.json: the legacy /products/mixrack redirects are missing');
