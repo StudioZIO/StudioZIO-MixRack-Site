@@ -62,7 +62,8 @@ Notes · Contact · Press kit · ZIO.
 
 Vercel project `studioziomixrack`, built with `npm run build` into `dist/`.
 `vercel.json` carries the estate's CSP (`default-src 'self'`, no
-`unsafe-inline`, `form-action 'none'`) and redirects the hub's old path,
+`unsafe-inline`, `form-action https://buttondown.com` and nothing else) and
+redirects the hub's old path,
 `/products/mixrack`, to `/` so an old link still lands on the product.
 
 The hub has no MixRack page of its own: its `vercel.json` sends
@@ -78,6 +79,13 @@ and Switzerland until the visitor accepts. The release-notice and
 tester-interest forms post to the same Formspree endpoint the hub uses, and
 identify themselves as `StudioZIO MixRack site` so their submissions can be
 told apart from the hub's.
+
+Directly under the download box sits the StudioZIO Early Access sign-up: the
+same form, wording and consent version (`2026-09-21`) as the hub's
+`/early-access/` page. It posts natively to Buttondown (its embed endpoint
+refuses a fetch), records `metadata__source` as
+`studioziomixrack.vercel.app/`, links the hub's privacy policy, and fires
+`early_access_submit` with that source. The download never waits on it.
 
 This domain is in GA4's cross-domain list, so a visitor moving between the
 hub and this site counts as one session.
