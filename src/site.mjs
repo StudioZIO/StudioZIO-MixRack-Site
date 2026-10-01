@@ -72,8 +72,8 @@ export { MEASUREMENT_ID };
    metadata__source differs, so the list records that a sign-up came from
    this site. Buttondown's embed endpoint must be the action of a native
    <form> (its docs rule out fetch), which is why vercel.json's form-action
-   names https://buttondown.com and nothing else. The Formspree forms below
-   are untouched and still post by fetch.
+   names https://buttondown.com and nothing else. The Formspree tester form below
+   is untouched and still posts by fetch.
    The consent wording is versioned: change the text, change the date, and
    change it on the hub first. */
 export const EARLY_ACCESS_ENDPOINT = 'https://buttondown.com/api/emails/embed-subscribe/studiozio';
@@ -385,7 +385,7 @@ export function renderMixRack() {
     canonical: `${SITE_ORIGIN}/`,
     current: 'mixrack',
     jsonLd: mixrackJsonLd(),
-    scripts: '<script src="/assets/notify.js" defer></script><script src="/assets/tester.js" defer></script><script src="/assets/video.js" defer></script><script src="/assets/countdown.js" defer></script>' + EARLY_ACCESS_SCRIPT,
+    scripts: '<script src="/assets/tester.js" defer></script><script src="/assets/video.js" defer></script><script src="/assets/countdown.js" defer></script>' + EARLY_ACCESS_SCRIPT,
     content: `<section class="hero tech-grid">
       <div class="shell">
         <div class="rise">
@@ -470,37 +470,6 @@ export function renderMixRack() {
         <noscript>
           <p class="form-note">The download button needs JavaScript: the installer's address is held by this site's server and fetched when the page loads, so with JavaScript off there is nothing to click. StudioZIO MixRack ${escapeHtml(mixrack.version)} is out; please switch JavaScript on for this page rather than assuming the download is gone.</p>
         </noscript>${earlyAccessSignup()}
-      </div>
-    </section>
-    <section class="section" id="release-notice" aria-labelledby="mixrack-notify-title">
-      <div class="shell">
-        <div class="section-head">
-          <p class="eyebrow">Update notice</p>
-          <h2 id="mixrack-notify-title">Hear about the next one</h2>
-          <p class="lede">StudioZIO MixRack ${escapeHtml(mixrack.version)} is out and needs no sign-up to download. Leave an address and it gets used once more — on the day the next MixRack version ships.</p>
-        </div>
-        <form class="panel-float notify-form" novalidate="false">
-          <div class="form-hp" aria-hidden="true">
-            <label for="notify-company">Company</label>
-            <input id="notify-company" name="company" type="text" tabindex="-1" autocomplete="off">
-          </div>
-
-          <div class="form-row">
-            <label class="form-label" for="notify-email">Email <span class="req">required</span></label>
-            <input id="notify-email" name="email" class="field" type="email" required autocomplete="email">
-            <p class="form-hint">One message, when the next StudioZIO MixRack version is released. Nothing else is sent to it, and it is not used for anything else.</p>
-          </div>
-
-          <p class="form-status" role="status" aria-live="polite"></p>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Notify me at the next release</button>
-          </div>
-        </form>
-
-        <noscript>
-          <p class="form-note">This form needs JavaScript to send. With it switched off nothing is submitted, so please enable it for this page rather than assuming an address was recorded.</p>
-        </noscript>
       </div>
     </section>
     <section class="section" id="testing" aria-labelledby="mixrack-tester-title">

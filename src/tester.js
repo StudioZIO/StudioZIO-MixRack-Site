@@ -1,19 +1,14 @@
 /* StudioZIO MixRack tester-interest submission.
 
-   Same two constraints as src/notify.js, for the same reasons: the site is
-   served under `form-action 'none'`, so a native POST is refused — a plain
+   The site's CSP form-action allows only Buttondown (for the Early Access
+   box), so a native POST here is refused — a plain
    <form action="..."> would render, validate, submit, and silently go
    nowhere — and the only way out of the page is a fetch to the one endpoint
    `connect-src` allows. The markup therefore carries no action attribute at
    all, so there is no form that looks submittable but is not.
 
-   Kept as its own file rather than folded into notify.js: the two forms
-   collect different fields, post a different `intent`, and report a
-   different GA4 event, and the build copies plain classic scripts with no
-   bundler and no module graph — so sharing a helper would mean either
-   shipping a module or making one form's script depend on the other's DOM.
-   validate.mjs asserts both stay in step on the parts that matter, same as
-   notify.js and contact.js.
+   validate.mjs asserts it stays in step with contact.js on the parts that
+   matter.
 
    Progressive by construction: with JS off nothing submits, and the page
    says so instead of pretending interest was recorded. */
