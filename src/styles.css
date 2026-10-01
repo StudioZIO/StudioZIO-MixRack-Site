@@ -886,15 +886,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    The site's input surfaces: the support form, the MixRack release notice,
    and the MixRack tester-interest form. Controls inherit the panel/token set
    rather than introducing a second visual language: same radius, same
-   hairline, same focus ring as the buttons beside them. All three forms
+   hairline, same focus ring as the buttons beside them. All the forms
    share the shell so none can drift into a look of its own. */
 .support-form,
-.notify-form,
 .early-access-form,
 .tester-form { display: grid; gap: 1.5rem; padding: 1.75rem; }
 /* One short field does not want the full 1100px shell; the support form and
    the tester form have a grid of them and do. */
-.notify-form,
 .early-access-form { max-width: 34rem; }
 .form-grid { display: grid; gap: 1.25rem; }
 @media (min-width: 700px) {

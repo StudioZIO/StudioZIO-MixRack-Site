@@ -53,7 +53,6 @@ await cp(resolve(projectRoot, 'src/nav.js'), resolve(outputRoot, 'assets/nav.js'
 await cp(resolve(projectRoot, 'src/countdown.js'), resolve(outputRoot, 'assets/countdown.js'));
 // The release-notice and tester-interest forms: a fetch to the one endpoint
 // `connect-src` allows, because `form-action` refuses a native POST to it.
-await cp(resolve(projectRoot, 'src/notify.js'), resolve(outputRoot, 'assets/notify.js'));
 await cp(resolve(projectRoot, 'src/tester.js'), resolve(outputRoot, 'assets/tester.js'));
 // The Early Access box under the download posts natively to Buttondown (the
 // one host form-action allows); this only measures the submit.

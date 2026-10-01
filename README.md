@@ -75,9 +75,8 @@ MixRack and declares the canonical for its own domain.
 
 Same Google tag as the rest of the estate (`G-VL8Z542XMP`), same
 consent-first architecture: defaults are denied in Türkiye, the EEA, the UK
-and Switzerland until the visitor accepts. The release-notice and
-tester-interest forms post to the same Formspree endpoint the hub uses, and
-identify themselves as `StudioZIO MixRack site` so their submissions can be
+and Switzerland until the visitor accepts. The tester-interest form posts to the same Formspree endpoint the hub uses, and
+identifies itself as `StudioZIO MixRack site` so its submissions can be
 told apart from the hub's.
 
 Directly under the download box sits the StudioZIO Early Access sign-up: the
